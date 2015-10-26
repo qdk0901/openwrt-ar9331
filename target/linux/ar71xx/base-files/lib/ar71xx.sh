@@ -745,6 +745,9 @@ ar71xx_board_detect() {
 	*"HiWiFi HC6361")
 		name="hiwifi-hc6361"
 		;;
+	*"SXX AR9331")
+		name="sxx-ar9331"
+		;;	
 	esac
 
 	case "$machine" in

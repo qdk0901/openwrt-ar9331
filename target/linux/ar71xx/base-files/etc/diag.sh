@@ -280,6 +280,9 @@ get_status_led() {
 	wlr8100)
 		status_led="sitecom:amber:status"
 		;;
+	sxx-ar9331)
+		status_led="sxx-ar9331:green:system"
+		;;
 	esac
 }
 

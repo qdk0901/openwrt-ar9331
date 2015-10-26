@@ -171,6 +171,10 @@ el-m150)
 el-mini)
 	ucidef_set_interface_lan "eth0"
 	;;
+	
+sxx-ar9331)
+	ucidef_set_interface_lan "eth0"
+	;;
 
 tl-wdr4300|\
 tl-wr1041n-v2)

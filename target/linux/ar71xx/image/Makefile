@@ -291,6 +291,10 @@ mynet_n600_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,64k(devdat
 mynet_rext_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,7808k(firmware),64k(nvram)ro,64k(ART)ro,6848k@0x130000(filesystem)
 zyx_nbg6716_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,64k(env)ro,64k(RFdata)ro,-(nbu);ar934x-nfc:2048k(zyxel_rfsd),2048k(romd),1024k(header),2048k(kernel),-(ubi)
 
+sxx_mtdlayout_16M=mtdparts=ath-nor0:256k(u-boot),64k(u-boot-env),13888k(rootfs),2048k(uImage),64k(mib0),64k(ART),15936k@0x50000(firmware)
+sxx_mtdlayout_4M=mtdparts=ath-nor0:256k(u-boot),64k(u-boot-env),2240k(rootfs),1408k(uImage),64k(mib0),64k(ART),3648k@0x50000(firmware)
+sxx_mtdlayout_8M=mtdparts=ath-nor0:256k(u-boot),64k(u-boot-env),6336k(rootfs),1408k(uImage),64k(mib0),64k(ART),7744k@0x50000(firmware)
+
 
 define Image/BuildKernel
 	cp $(KDIR)/vmlinux.elf $(VMLINUX).elf
@@ -1231,6 +1235,9 @@ $(eval $(call SingleProfile,TPLINK-LZMA,64kraw,SMART-300,smart-300,SMART-300,tty
 
 $(eval $(call SingleProfile,TPLINK-LZMA,64kraw,OOLITE,oolite,GS-OOLITE,ttyATH0,115200,0x3C000101,1,16Mlzma))
 
+$(eval $(call SingleProfile,TPLINK-LZMA,64kraw,SXX_AR9331_8M,sxx-ar9331-8M,SXX-AR9331,ttyATH0,115200,0x85000001,1,8Mlzma))
+$(eval $(call SingleProfile,TPLINK-LZMA,64kraw,SXX_AR9331_16M,sxx-ar9331-16M,SXX-AR9331,ttyATH0,115200,0x86000001,1,16Mlzma))
+
 $(eval $(call SingleProfile,UAPPRO,64k,UAPPRO,ubnt-uap-pro,UAP-PRO,ttyS0,115200,BZ,BZ,ar934x))
 
 $(eval $(call SingleProfile,UBDEV,64kraw,UBDEV01,ubdev01,UBNT-UF,ttyS0,115200,XM,XM,ar7240))
@@ -1301,6 +1308,8 @@ $(eval $(call MultiProfile,WPE72,WPE72_4M WPE72_8M WPE72_16M))
 
 $(eval $(call MultiProfile,Minimal,$(SINGLE_PROFILES)))
 $(eval $(call MultiProfile,Madwifi,EAP7660D UBNTRS UBNTRSPRO UBNTLSSR71 WP543))
+
+$(eval $(call MultiProfile,SXX-AR9331,SXX_AR9331_8M SXX_AR9331_16M))
 endif # ifeq ($(SUBTARGET),generic)
 
 ifeq ($(SUBTARGET),nand)

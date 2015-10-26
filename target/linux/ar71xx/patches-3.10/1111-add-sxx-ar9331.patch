@@ -1,0 +1,45 @@
+Index: linux-3.10.49/arch/mips/ath79/Kconfig
+===================================================================
+--- linux-3.10.49.orig/arch/mips/ath79/Kconfig	2015-10-13 18:57:19.117485809 +0800
++++ linux-3.10.49/arch/mips/ath79/Kconfig	2015-10-21 12:52:35.249778340 +0800
+@@ -792,6 +792,16 @@
+ 	select ATH79_DEV_USB
+ 	select ATH79_DEV_WMAC
+ 
++config ATH79_MACH_SXX_AR9331
++        bool "SXX AR9331 support"
++        select SOC_AR933X
++        select ATH79_DEV_ETH
++        select ATH79_DEV_GPIO_BUTTONS
++        select ATH79_DEV_LEDS_GPIO
++        select ATH79_DEV_M25P80
++        select ATH79_DEV_USB
++        select ATH79_DEV_WMAC
++
+ config ATH79_MACH_TL_WR720N_V3
+ 	bool "TP-LINK TL-WR720N v3 support"
+ 	select SOC_AR933X
+Index: linux-3.10.49/arch/mips/ath79/Makefile
+===================================================================
+--- linux-3.10.49.orig/arch/mips/ath79/Makefile	2015-10-13 18:57:19.117485809 +0800
++++ linux-3.10.49/arch/mips/ath79/Makefile	2015-10-21 12:53:18.265780123 +0800
+@@ -119,6 +119,7 @@
+ obj-$(CONFIG_ATH79_MACH_TL_WR1043ND_V2)	+= mach-tl-wr1043nd-v2.o
+ obj-$(CONFIG_ATH79_MACH_TL_WR2543N)	+= mach-tl-wr2543n.o
+ obj-$(CONFIG_ATH79_MACH_TL_WR703N)	+= mach-tl-wr703n.o
++obj-$(CONFIG_ATH79_MACH_SXX_AR9331)      += mach-sxx-ar9331.o
+ obj-$(CONFIG_ATH79_MACH_TL_WR720N_V3)	+= mach-tl-wr720n-v3.o
+ obj-$(CONFIG_ATH79_MACH_TUBE2H)		+= mach-tube2h.o
+ obj-$(CONFIG_ATH79_MACH_UBNT)		+= mach-ubnt.o
+Index: linux-3.10.49/arch/mips/ath79/machtypes.h
+===================================================================
+--- linux-3.10.49.orig/arch/mips/ath79/machtypes.h	2015-10-13 18:57:19.117485809 +0800
++++ linux-3.10.49/arch/mips/ath79/machtypes.h	2015-10-21 12:58:57.425794184 +0800
+@@ -184,6 +184,7 @@
+ 	ATH79_MACH_WZR_HP_G450H,	/* Buffalo WZR-HP-G450H */
+ 	ATH79_MACH_ZCN_1523H_2,		/* Zcomax ZCN-1523H-2-xx */
+ 	ATH79_MACH_ZCN_1523H_5,		/* Zcomax ZCN-1523H-5-xx */
++	ATH79_MACH_SXX_AR9331,
+ };
+ 
+ #endif /* _ATH79_MACHTYPE_H */
