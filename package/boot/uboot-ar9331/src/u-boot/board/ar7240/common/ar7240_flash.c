@@ -32,7 +32,8 @@ flash_info_t flash_info[CFG_MAX_FLASH_BANKS];
 static void ar7240_spi_write_enable(void);
 static void ar7240_spi_poll(void);
 static void ar7240_spi_write_page(uint32_t addr, uint8_t * data, int len);
-static void ar7240_spi_sector_erase(uint32_t addr);
+static void ar7240_spi_erase_64k(uint32_t addr);
+static void ar7240_spi_erase_4k(uint32_t addr);
 
 /*
  * Returns JEDEC ID from SPI flash
@@ -180,7 +181,7 @@ unsigned long flash_init(void){
 			break;
 
 		case 0xEF4017:	// tested
-			flash_set_geom(SIZE_INBYTES_8MBYTES, 256, SIZE_INBYTES_32KBYTES); //qdk+m
+			flash_set_geom(SIZE_INBYTES_8MBYTES, 128, SIZE_INBYTES_64KBYTES); //qdk+m
 			puts("Winbond W25Q64 (8 MB)");
 			break;
 
@@ -246,7 +247,7 @@ int flash_erase(flash_info_t *info, int s_first, int s_last){
 	j = 0;
 
 	for(i = s_first; i <= s_last; i++){
-		ar7240_spi_sector_erase(i * sector_size);
+		ar7240_spi_erase_64k(i * sector_size);
 
 		if(j == 39){
 			puts("\n         ");
@@ -263,6 +264,36 @@ int flash_erase(flash_info_t *info, int s_first, int s_last){
 
 	return(0);
 }
+
+#define SECTOR_ERASE_SIZE 4096
+#define ALIGN(x) ((x)/SECTOR_ERASE_SIZE) * SECTOR_ERASE_SIZE
+
+int flash_erase_4k(int start, int end) {
+	int i = 0;
+	int base = 0x9F000000;
+	
+	start = ALIGN(start - base);
+	end = ALIGN(end - base);
+
+	printf("Erasing: %08X-%08X\n", start, end);
+
+	while (start <= end) {
+		ar7240_spi_erase_4k(start);
+		start += SECTOR_ERASE_SIZE;
+		
+		if((i + 1) % 40 == 0){
+			printf("\n");
+		}
+		printf("#");
+		led_toggle();
+		i++;
+	}
+	
+	ar7240_spi_done();
+	all_led_off();
+	printf("\n\n");
+	return(0);
+} 
 
 /*
  * Write a buffer from memory to flash:
@@ -327,7 +358,15 @@ static void ar7240_spi_write_page(uint32_t addr, uint8_t *data, int len){
 	ar7240_spi_poll();
 }
 
-static void ar7240_spi_sector_erase(uint32_t addr){
+static void ar7240_spi_erase_64k(uint32_t addr){
+	ar7240_spi_write_enable();
+	ar7240_spi_bit_banger(AR7240_SPI_CMD_BLOCK_ERASE);
+	ar7240_spi_send_addr(addr);
+	ar7240_spi_go();
+	ar7240_spi_poll();
+}
+
+static void ar7240_spi_erase_4k(uint32_t addr){
 	ar7240_spi_write_enable();
 	ar7240_spi_bit_banger(AR7240_SPI_CMD_SECTOR_ERASE);
 	ar7240_spi_send_addr(addr);

@@ -239,7 +239,7 @@ int saveenv(void){
 
 	end_addr = flash_sect_addr + len - 1;
 
-	if(flash_sect_erase(flash_sect_addr, end_addr)){
+	if(flash_erase_4k(flash_sect_addr, end_addr)){
 		return(1);
 	}
 

@@ -42,7 +42,7 @@ typedef struct {
 extern unsigned long flash_init (void);
 extern int flash_erase(flash_info_t *, int, int);
 extern int flash_sect_erase(ulong addr_first, ulong addr_last);
-
+extern int flash_erase_4k(int, int);
 /* common/flash.c */
 extern int flash_write(char *, ulong, ulong);
 extern flash_info_t *addr2info(ulong);

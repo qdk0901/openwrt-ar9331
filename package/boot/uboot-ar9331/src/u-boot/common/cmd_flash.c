@@ -133,6 +133,16 @@ static int addr_spec(char *arg1, char *arg2, ulong *addr_first, ulong *addr_last
 	if(ep == arg2 || *ep != '\0'){
 		return(-1);
 	}
+	
+	//qdk++S
+	if (len_used) {
+		flash_info_t *info = &flash_info[0]; //ar9331 only support 1 bank
+		if (*addr_last < info->sector_size) {
+			*addr_last = *addr_first + *addr_last - 1;
+			return (1);
+		}
+	}
+	//qdk++E
 
 	if(len_used){
 		char found = 0;
@@ -287,7 +297,7 @@ int do_flerase(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]){
 #endif
 		return(1);
 	}
-
+	
 	// erase whole flash?
 	if(strcmp(argv[1], "all") == 0){
 		for(bank = 1; bank <= CFG_MAX_FLASH_BANKS; ++bank){
@@ -352,8 +362,13 @@ int do_flerase(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]){
 #endif
 		return(1);
 	}
-
-	rcode = flash_sect_erase(addr_first, addr_last);
+	
+	info = &flash_info[0];
+	if (addr_last - addr_first < info->sector_size) {
+		rcode = flash_erase_4k(addr_first, addr_last);
+	} else {
+		rcode = flash_sect_erase(addr_first, addr_last);
+	}
 	return(rcode);
 }
 
