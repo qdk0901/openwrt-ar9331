@@ -784,13 +784,13 @@
 	#define CFG_ENV_SIZE		0x8000
 	#define CFG_ENV_SECT_SIZE	0x10000
 #elif defined(CONFIG_FOR_SXX_AR9331)
-	#define CFG_ENV_ADDR		0x9F01EC00
-	#define CFG_ENV_SIZE		0x1000
-	#define CFG_ENV_SECT_SIZE	0x10000
-#else
 	#define CFG_ENV_ADDR		0x9F010000
 	#define CFG_ENV_SIZE		0x1000
 	#define CFG_ENV_SECT_SIZE	0x8000
+#else
+	#define CFG_ENV_ADDR		0x9F01EC00
+	#define CFG_ENV_SIZE		0x1000
+	#define CFG_ENV_SECT_SIZE	0x10000
 #endif
 
 /*
